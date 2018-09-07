@@ -1,10 +1,11 @@
+# encoding=utf-8
 import os
 from unittest import TestCase
 
 import res_public_parser
 import test_const
 import utils
-
+import re
 
 class TestResPublicParser(TestCase):
     def test_parse(self):
@@ -67,7 +68,7 @@ class TestResPublicParser(TestCase):
             pub._id = res_id + 1
             dict[pub._type] = pub._id
             new = pub._id
-            id_dict["0x%08x" % old] = "0x%08x" % new
+            id_dict[pub._name] = "0x%08x" % new
 
             # print('s/id="0x%08x"/id="0x%08x"/g' % (old, new))
 
@@ -81,9 +82,10 @@ class TestResPublicParser(TestCase):
             with open(path + os.path.sep + eui_publc_xml_file) as in_file:
                 for line in in_file:
                     new_line = line
-                    for key in id_dict.keys():
-                        if line.find(key) >= 0:
-                            new_line = line.replace(key, id_dict[key])
+                    for name in id_dict.keys():
+                        # 定位到需要替换的行。
+                        if line.find('"%s"' % name) >= 0:
+                            new_line = re.sub(r'id="0x[0-9a-zA-Z]+"', 'id="%s"' % id_dict[name], line)
                             break
                     out_file.write(new_line)
 
