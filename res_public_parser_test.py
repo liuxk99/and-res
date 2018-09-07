@@ -59,6 +59,7 @@ class TestResPublicParser(TestCase):
         res_public_parser.parse(path + os.path.sep + eui_publc_xml_file)
         # utils.dumpSeq1(res_public_parser.publicList)
 
+        id_dict = {}
         eui_public_seq = res_public_parser.public_seq
         for pub in eui_public_seq:
             old = pub._id
@@ -66,8 +67,24 @@ class TestResPublicParser(TestCase):
             pub._id = res_id + 1
             dict[pub._type] = pub._id
             new = pub._id
+            id_dict["0x%08x" % old] = "0x%08x" % new
 
-            print('s/id="0x%08x"/id="0x%08x"/g' % (old, new))
+            # print('s/id="0x%08x"/id="0x%08x"/g' % (old, new))
+
+        for key in id_dict:
+            print("%s : %s" % (key, id_dict[key]))
 
         # res_public_parser.to_xml()
+        target_xml_file = "target.xml"
+
+        with open(path + os.path.sep + target_xml_file, 'w') as out_file:
+            with open(path + os.path.sep + eui_publc_xml_file) as in_file:
+                for line in in_file:
+                    new_line = line
+                    for key in id_dict.keys():
+                        if line.find(key) >= 0:
+                            new_line = line.replace(key, id_dict[key])
+                            break
+                    out_file.write(new_line)
+
         pass
