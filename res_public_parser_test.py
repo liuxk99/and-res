@@ -29,11 +29,13 @@ class TestResPublicParser(TestCase):
     def test_eui(self):
         path = r"/home/thomas/Programmer/SDE/Android/letv/demeter/frameworks/base/core/res/res/values"
         path = r"C:\Users\thomas.XancL-NB\Desktop"
+        # android resource
         xml_file = r"public.xml"
 
         res_public_parser.parse(path + os.path.sep + xml_file)
         # utils.dumpSeq1(res_public_parser.publicList)
 
+        # mstar resource
         overlay_file = r"overlay.xml"
         res_public_parser.parse(path + os.path.sep + overlay_file)
         public_seq = res_public_parser.public_seq[:]
@@ -56,7 +58,8 @@ class TestResPublicParser(TestCase):
 
         res_public_parser.public_seq = []
 
-        eui_publc_xml_file = r"eui.public.xml"
+        # eui resource
+        eui_publc_xml_file = r"3rd.xml"
         res_public_parser.parse(path + os.path.sep + eui_publc_xml_file)
         # utils.dumpSeq1(res_public_parser.publicList)
 
@@ -75,7 +78,7 @@ class TestResPublicParser(TestCase):
         for key in id_dict:
             print("%s : %s" % (key, id_dict[key]))
 
-        # res_public_parser.to_xml()
+        res_public_parser.to_xml()
         target_xml_file = "target.xml"
 
         with open(path + os.path.sep + target_xml_file, 'w') as out_file:
