@@ -23,8 +23,8 @@ gRES_NAME_DICT = {}
 gFILE_NAME_DICT = {}
 
 
-def parse_res_names():
-    with open(gRES_NAMES_FILE) as in_file:
+def parse_res_names(res_names_file):
+    with open(res_names_file) as in_file:
         for line in in_file:
             line = line.rstrip()
             name_pair = line.split(", ")
@@ -49,7 +49,7 @@ def parse_res_names():
 
 
 # -- You should modify the CLIENT_DIR value
-CLIENT_DIR = r"C:\Users\thomas.XancL-NB\Desktop\EUI-Support-Demos\EuiSupport\src\main"
+CLIENT_DIR = r"C:\Users\thomas.XancL-NB\Desktop\EUI-Support-Demos\open-apidemo\src\main"
 
 
 def parse_line(old_res, line):
@@ -110,9 +110,19 @@ def rename_res_names():
 
 
 def main(argv):
-    parse_res_names()
+    if len(argv) < 2:
+        print 'usage: res_name_parser.py $res_name.txt $client_dir'
+        exit(1)
+
+    res_names_file = gRES_NAMES_FILE
+    client_dir = CLIENT_DIR
+
+    res_names_file = argv[0]
+    client_dir = argv[1]
+
+    parse_res_names(res_names_file)
     # if os._exists(client_dir):
-    walk(CLIENT_DIR)
+    walk(client_dir)
 
     # rename files
     for path in gFILE_NAME_DICT:
@@ -125,6 +135,9 @@ def main(argv):
 
 
 def is_file_res(path):
+    # resource
+    # - file resource
+    # - xml resource
     folder_list = ['anim', 'color', 'drawable', 'layout']
     for folder in folder_list:
         if path.find(folder):
